@@ -42,7 +42,7 @@ local auto = false
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
---// Auto-fire loop (0.5 sec)
+--// Auto-fire loop (0.1 sec)
 task.spawn(function()
     while true do
         if auto then
@@ -57,7 +57,7 @@ task.spawn(function()
                 end
             end)
         end
-        task.wait(0.5) -- run every 0.5 seconds
+        task.wait(0.1) -- run every 0.1 seconds
     end
 end)
 
