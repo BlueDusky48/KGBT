@@ -1,0 +1,82 @@
+--// Remove old GUI if it exists
+if game:GetService("CoreGui"):FindFirstChild("AbyssAutoGui") then
+    game:GetService("CoreGui"):FindFirstChild("AbyssAutoGui"):Destroy()
+end
+
+--// Create ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "AbyssAutoGui"
+ScreenGui.Parent = game:GetService("CoreGui")
+
+--// Function to create styled button
+local function createButton(text, position)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 150, 0, 50)
+    button.Position = position
+    button.Text = text
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 20
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    button.BorderSizePixel = 0
+    button.AutoButtonColor = true
+    button.Active = true
+    button.Draggable = true
+    button.Parent = ScreenGui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = button
+
+    return button
+end
+
+--// Center position
+local center = UDim2.new(0.5, -75, 0.5, -25)
+
+--// Create toggle button
+local ToggleButton = createButton("Abyss OFF", center)
+
+-- Variables
+local auto = false
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Function to fire Abyss once
+local function fireAbyss()
+    pcall(function()
+        local char = player.Character
+        if char and char:FindFirstChild("Solo") then
+            local solo = char:FindFirstChild("Solo")
+            local remoteFolder = solo:FindFirstChild("SkillsRemote")
+            if remoteFolder and remoteFolder:FindFirstChild("SkillEvent") then
+                remoteFolder.SkillEvent:FireServer("Abyss")
+            end
+        end
+    end)
+end
+
+--// Auto-fire loop (30 seconds)
+task.spawn(function()
+    while true do
+        if auto then
+            fireAbyss() -- fire every 30 seconds
+        end
+        task.wait(30)
+    end
+end)
+
+--// Toggle logic
+ToggleButton.MouseButton1Click:Connect(function()
+    auto = not auto
+    if auto then
+        ToggleButton.Text = "Abyss ON"
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+
+        fireAbyss()  -- 🔥 fire instantly on first click
+
+    else
+        ToggleButton.Text = "Abyss OFF"
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+    end
+end)
