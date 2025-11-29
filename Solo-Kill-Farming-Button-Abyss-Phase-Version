@@ -31,10 +31,10 @@ local function createButton(text, position)
     return button
 end
 
--- Center position
+--// Center position
 local center = UDim2.new(0.5, -75, 0.5, -25)
 
--- Create toggle button
+--// Create toggle button
 local ToggleButton = createButton("Abyss OFF", center)
 
 -- Variables
@@ -42,7 +42,7 @@ local auto = false
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- Function to fire Abyss
+-- Function to fire Abyss once
 local function fireAbyss()
     pcall(function()
         local char = player.Character
@@ -56,43 +56,27 @@ local function fireAbyss()
     end)
 end
 
--- Auto-fire loop (every 30 seconds)
+--// Auto-fire loop (30 seconds)
 task.spawn(function()
     while true do
         if auto then
-            fireAbyss()
+            fireAbyss() -- fire every 30 seconds
         end
         task.wait(30)
     end
 end)
 
--- Toggle logic
+--// Toggle logic
 ToggleButton.MouseButton1Click:Connect(function()
     auto = not auto
-
-    -- Make sure character exists
-    local char = player.Character or player.CharacterAdded:Wait()
-    local hrp = char:WaitForChild("HumanoidRootPart")
-    local humanoid = char:WaitForChild("Humanoid")
-
     if auto then
         ToggleButton.Text = "Abyss ON"
         ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 
-        fireAbyss() -- fire immediately
-
-        -- ⛔ TRUE FREEZE → Anchor the HRP
-        hrp.Anchored = true
-        humanoid.WalkSpeed = 0
-        humanoid.JumpPower = 0
+        fireAbyss()  -- 🔥 fire instantly on first click
 
     else
         ToggleButton.Text = "Abyss OFF"
         ToggleButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
-
-        -- ✅ Unfreeze
-        hrp.Anchored = false
-        humanoid.WalkSpeed = 16
-        humanoid.JumpPower = 50
     end
 end)
