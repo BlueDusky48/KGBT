@@ -8,6 +8,18 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "DarkOrbAutoGui"
 ScreenGui.Parent = game:GetService("CoreGui")
 
+--// 🔥 Auto-run PhaseChose "@Badboy" on execute
+task.spawn(function()
+    pcall(function()
+        local args = { "@Badboy" }
+        game:GetService("Players").LocalPlayer
+        :WaitForChild("PlayerGui")
+        :WaitForChild("Menu")
+        :WaitForChild("PhaseChose")
+        :InvokeServer(unpack(args))
+    end)
+end)
+
 --// Function to create styled button
 local function createButton(text, position)
     local button = Instance.new("TextButton")
@@ -57,7 +69,7 @@ task.spawn(function()
                 end
             end)
         end
-        task.wait(0.1) -- run every 0.1 seconds
+        task.wait(0.1)
     end
 end)
 
