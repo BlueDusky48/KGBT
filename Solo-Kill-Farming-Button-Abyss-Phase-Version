@@ -8,6 +8,18 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "AbyssAutoGui"
 ScreenGui.Parent = game:GetService("CoreGui")
 
+--// 🔥 Auto Phase Choose (@Abyss) on execute
+task.spawn(function()
+    pcall(function()
+        local args = { "@Abyss" }
+        game:GetService("Players").LocalPlayer
+            :WaitForChild("PlayerGui")
+            :WaitForChild("Menu")
+            :WaitForChild("PhaseChose")
+            :InvokeServer(unpack(args))
+    end)
+end)
+
 --// Function to create styled button
 local function createButton(text, position)
     local button = Instance.new("TextButton")
@@ -42,7 +54,7 @@ local auto = false
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- Function to fire Abyss once
+--// Function to fire Abyss
 local function fireAbyss()
     pcall(function()
         local char = player.Character
@@ -56,13 +68,13 @@ local function fireAbyss()
     end)
 end
 
---// Auto-fire loop (32.5 seconds)
+--// Auto-fire loop (30 seconds)
 task.spawn(function()
     while true do
         if auto then
-            fireAbyss() -- fire every 32.5 seconds
+            fireAbyss()
         end
-        task.wait(32.5)
+        task.wait(31.25)
     end
 end)
 
@@ -72,9 +84,7 @@ ToggleButton.MouseButton1Click:Connect(function()
     if auto then
         ToggleButton.Text = "Abyss ON"
         ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-
-        fireAbyss()  -- 🔥 fire instantly on first click
-
+        fireAbyss() -- fire instantly
     else
         ToggleButton.Text = "Abyss OFF"
         ToggleButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
